@@ -5,7 +5,6 @@ import com.example.AdmComercio.service.IProductoService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +27,7 @@ public class ProductoController {
         return "El producto fue creado correctamente";
     }
 
-    //ENDPOINT para obtener todas los productos
+    //ENDPOINT para obtener todos los productos
     @GetMapping("/productos")
     public List<Producto> getProductos() {
         return producServ.getProductos();
@@ -40,7 +39,7 @@ public class ProductoController {
         return producServ.findProducto(codigo_producto);
     }
 
-    //ENDPOINT para eliminar una nueva persona
+    //ENDPOINT para eliminar un cliente
     @DeleteMapping("/productos/eliminar/{codigo_producto}")
     public String deleteProducto(@PathVariable Long codigo_producto) {
 
