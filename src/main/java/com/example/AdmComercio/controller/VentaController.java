@@ -43,7 +43,7 @@ public class VentaController {
     }
 
 //ENDPOINT para eliminar una venta
-    @DeleteMapping("/ventas/eliminar/{codigo_venta}}")
+    @DeleteMapping("/ventas/eliminar/{codigo_venta}")
     public String deleteVenta(@PathVariable Long codigo_venta) {
         ventaServ.deleteVenta(codigo_venta);
         //mensaje de eliminacion correcta

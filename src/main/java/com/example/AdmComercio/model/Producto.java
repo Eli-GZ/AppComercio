@@ -15,7 +15,7 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long codigo_producto;
+    private Long codigo_producto;    
     private String nombre;
     private String marca;
     private Double costo;

@@ -71,4 +71,16 @@ public class ProductoController {
         producServ.editProducto(produ);
         return producServ.findProducto(produ.getCodigo_producto());
     }
+
+//***************************************
+    //ENDPOINT para obtener todos los productos
+    @GetMapping("/productos/falta_stock")
+    public List<Producto> faltaStock() {
+        List<Producto> stock = producServ.getProductos();
+        for (int i = 0; i < stock.size(); i++) {
+            System.out.println("El objeto en esta posicion es: "+stock.get(i));
+        }
+        return null;
+    }
+
 }
