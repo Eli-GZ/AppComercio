@@ -3,6 +3,7 @@ package com.example.AdmComercio.controller;
 import com.example.AdmComercio.model.Producto;
 import com.example.AdmComercio.service.IProductoService;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -74,13 +76,13 @@ public class ProductoController {
 
 //***************************************
     //ENDPOINT para obtener todos los productos
-    @GetMapping("/productos/falta_stock")
+    @GetMapping("/productos/falta_stock")   
     public List<Producto> faltaStock() {
-        List<Producto> stock = producServ.getProductos();
-        for (int i = 0; i < stock.size(); i++) {
-            System.out.println("El objeto en esta posicion es: "+stock.get(i));
-        }
-        return null;
+        List<Producto> productos = producServ.getProductos();
+        
+        return productos.stream().filter(p -> p.getCantidad_disponible()<=5).collect(Collectors.toList());
+        
+        
     }
 
 }
