@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Venta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long codigo_venta;
     private LocalDate fecha_venta;
     private Double total;

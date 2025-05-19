@@ -38,7 +38,7 @@ public class VentaController {
 
 //ENDPOINT para obtener una venta
     @GetMapping("/ventas/{codigo_venta}")
-    public Venta getVenta(Long codigo_venta) {
+    public Venta getVenta(@PathVariable Long codigo_venta) {
         return ventaServ.findVenta(codigo_venta);
     }
 
@@ -73,5 +73,10 @@ public class VentaController {
         ventaServ.editVenta(vent);
         return ventaServ.findVenta(vent.getCodigo_venta());
     }
+//**********************************************
 
+    @GetMapping("/ventas/productos/{codigo_venta}")
+    public Venta getProductoVenta(Long codigo_venta) {
+        return ventaServ.findVenta(codigo_venta);
+    }
 }

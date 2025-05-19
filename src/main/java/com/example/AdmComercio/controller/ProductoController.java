@@ -37,17 +37,23 @@ public class ProductoController {
 
     //ENDPOINT para obtener un producto
     @GetMapping("/productos/{codigo_producto}")
-    public Producto getProducto(Long codigo_producto) {
+    public Producto getProducto(@PathVariable Long codigo_producto) {
         return producServ.findProducto(codigo_producto);
     }
 
-    //ENDPOINT para eliminar un cliente
+    //ENDPOINT para eliminar un producto
     @DeleteMapping("/productos/eliminar/{codigo_producto}")
     public String deleteProducto(@PathVariable Long codigo_producto) {
+        Producto produ = producServ.findProducto(codigo_producto);
 
-        producServ.deleteProducto(codigo_producto);
-        //mensaje de eliminacion correcta
-        return "El producto fue eliminado correctamente";
+        if (produ != null) {
+            producServ.deleteProducto(codigo_producto);
+            //mensaje de eliminacion correcta
+            return "El producto fue eliminado correctamente";
+        } else {
+            return "**No se encontro el codigo del producto**";
+        }
+
     }
 
     //ENDPOINT para modificar una nueva persona
@@ -76,13 +82,12 @@ public class ProductoController {
 
 //***************************************
     //ENDPOINT para obtener todos los productos
-    @GetMapping("/productos/falta_stock")   
+    @GetMapping("/productos/falta_stock")
     public List<Producto> faltaStock() {
         List<Producto> productos = producServ.getProductos();
-        
-        return productos.stream().filter(p -> p.getCantidad_disponible()<=5).collect(Collectors.toList());
-        
-        
+
+        return productos.stream().filter(p -> p.getCantidad_disponible() <= 5).collect(Collectors.toList());
+
     }
 
 }

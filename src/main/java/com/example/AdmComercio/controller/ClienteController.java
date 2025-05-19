@@ -35,7 +35,7 @@ public class ClienteController {
 
     //ENDPOINT para obtener un cliente
     @GetMapping("/clientes/{id_cliente}")
-    public Cliente getCliente(Long id_cliente) {
+    public Cliente getCliente(@PathVariable Long id_cliente) {
         return clientServ.findCliente(id_cliente);
     }
 
