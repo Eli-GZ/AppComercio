@@ -44,6 +44,8 @@ public class ProductoController {
     //ENDPOINT para eliminar un producto
     @DeleteMapping("/productos/eliminar/{codigo_producto}")
     public String deleteProducto(@PathVariable Long codigo_producto) {
+        
+        //confirmar que existe un producto
         Producto produ = producServ.findProducto(codigo_producto);
 
         if (produ != null) {
@@ -56,7 +58,7 @@ public class ProductoController {
 
     }
 
-    //ENDPOINT para modificar una nueva persona
+    //ENDPOINT para modificar una producto
     @PutMapping("/productos/editar/{codigo_producto}")
     public Producto editProducto(@PathVariable Long codigo_producto,
             @RequestParam(required = false, name = "nombre") String nombreNuevo,

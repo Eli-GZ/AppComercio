@@ -41,10 +41,18 @@ public class ClienteController {
 
     //ENDPOINT para eliminar un cliente
     @DeleteMapping("/clientes/eliminar/{id_cliente}")
-    public String deleteCliente(@PathVariable Long id_cliente) {
-        clientServ.deleteCliente(id_cliente);
-        //mensaje de eliminacion correcta
-        return "El cliente fue eliminado correctamente";
+    public String deleteCliente(@PathVariable Long id_cliente) {   
+        
+        //confirmar que existe un cliente        
+        Cliente clien = clientServ.findCliente(id_cliente);
+
+        if (clien != null) {
+             clientServ.deleteCliente(id_cliente);
+            //mensaje de eliminacion correcta
+            return "El cliente fue eliminado correctamente";
+        } else {
+            return "**No se encontro el id del cliente**";
+        }
     }
 
     //ENDPOINT para modificar un nuevo cliente
