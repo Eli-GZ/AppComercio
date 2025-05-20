@@ -95,39 +95,47 @@ public class VentaController {
         }
     }
 
-//ENDPOINT para modificar un venta
-    @PutMapping("/ventas/editar/{codigo_venta}")
-    public Venta editVenta(@PathVariable Long codigo_venta,
-            @RequestParam(required = false, name = "fecha") LocalDate nuevaFecha_venta,
-            @RequestParam(required = false, name = "total") Double nuevoTotal,
-            @RequestParam(required = false, name = "listaProductos") List<Producto> nuevaListaProductos,
-            @RequestParam(required = false, name = "unCLiente") Cliente nuevoUnCliente) {
-        //Envio id original(para buscar)
+@PutMapping("/ventas/editar/{codigo_venta}")
+public String editVenta(@PathVariable Long codigo_venta, @RequestBody VentaDTO ventaDTO) {
 
-        //Envio nuevos datos para modificar
-        ventaServ.editVenta(codigo_venta, nuevaFecha_venta, nuevoTotal, nuevaListaProductos, nuevoUnCliente);
-
-        //busco la venta editada para mostrarla
-        Venta vent = ventaServ.findVenta(codigo_venta);
-
-        return vent;
+    // Buscar la venta original
+    Venta ventaExistente = ventaServ.findVenta(codigo_venta);
+    if (ventaExistente == null) {
+        return "** Error: Venta no encontrada **";
     }
 
-    @PutMapping("/ventas/editar")
-    public Venta editVenta(@RequestBody Venta vent) {
-        ventaServ.editVenta(vent);
-        return ventaServ.findVenta(vent.getCodigo_venta());
+    // Obtener todos los productos
+    List<Producto> todosLosProductos = produServ.getProductos();
+
+    // Filtrar los productos seleccionados
+    List<Producto> productosSeleccionados = todosLosProductos.stream()
+        .filter(p -> ventaDTO.getListaProductosIds().contains(p.getCodigo_producto()))
+        .collect(Collectors.toList());
+
+    // Buscar el cliente
+    List<Cliente> todosLosClientes = clientServ.getClientes();
+    Cliente cliente = todosLosClientes.stream()
+        .filter(c -> c.getId_cliente().equals(ventaDTO.getClienteId()))
+        .findFirst()
+        .orElse(null);
+
+    if (cliente == null || productosSeleccionados.isEmpty()) {
+        return "** Error: Cliente o productos no encontrados **";
     }
+
+    // Actualizar los datos de la venta
+    ventaExistente.setFecha_venta(ventaDTO.getFecha_venta());
+    ventaExistente.setTotal(ventaDTO.getTotal());
+    ventaExistente.setListaProductos(productosSeleccionados);
+    ventaExistente.setUnCliente(cliente);
+
+    // Guardar los cambios
+    ventaServ.saveVenta(ventaExistente);
+
+    return "La venta fue editada correctamente";
+}
 //**********************************************
 
-    @GetMapping("/ventas/productos/{codigo_venta}")
-    public List<Producto> getProductoVenta(@PathVariable Long codigo_venta) {
-        Venta vent = ventaServ.findVenta(codigo_venta);
-
-        if (vent != null) {
-            return vent.getListaProductos();
-        } else {
-            return null;
-        }
-    }
+    
+    
 }
