@@ -91,7 +91,7 @@ public class VentaController {
             //mensaje de eliminacion correcta
             return "La venta fue eliminada correctamente";
         } else {
-            return "**No se encontro el codigo de venta*";
+            return "**No se encontro el codigo de venta**";
         }
     }
 
