@@ -136,6 +136,17 @@ public String editVenta(@PathVariable Long codigo_venta, @RequestBody VentaDTO v
 }
 //**********************************************
 
+     @GetMapping("/ventas/productos/{codigo_venta}")
+    public List<Producto> getListaProductos(@PathVariable Long codigo_venta) {
+        
+      // Buscar la venta original
+    Venta ventaExistente = ventaServ.findVenta(codigo_venta);
     
+    if (ventaExistente == null){
+        return null;    
+    }
+    
+    return ventaExistente.getListaProductos();
+    }
     
 }
