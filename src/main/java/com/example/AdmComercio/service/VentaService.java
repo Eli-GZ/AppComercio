@@ -42,7 +42,7 @@ public class VentaService implements IVentaService {
 
         Venta vent = this.findVenta(codigo_venta);
 
-        vent.setFecha_venta(nuevaFecha_venta);
+        vent.setFechaVenta(nuevaFecha_venta);
         vent.setTotal(nuevoTotal);
         vent.setListaProductos(nuevaListaProductos);
         vent.setUnCliente(nuevoUnCliente);
@@ -54,6 +54,11 @@ public class VentaService implements IVentaService {
     @Override
     public void editVenta(Venta vent) {
         this.saveVenta(vent);
+    }
+
+    @Override
+    public List<Venta> getVentasPorFecha(LocalDate fecha) {
+        return VentRepo.findByFechaVenta(fecha);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.AdmComercio.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,8 @@ public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long codigo_venta;
-    private LocalDate fecha_venta;
+    @Column(name = "fecha_venta")
+    private LocalDate fechaVenta;
     private Double total;
 
     @ManyToMany
@@ -33,12 +35,14 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(Long codigo_venta, LocalDate fecha_venta, Double total, List<Producto> listaProductos, Cliente unCliente) {
+    public Venta(Long codigo_venta, LocalDate fechaVenta, Double total, List<Producto> listaProductos, Cliente unCliente) {
         this.codigo_venta = codigo_venta;
-        this.fecha_venta = fecha_venta;
+        this.fechaVenta = fechaVenta;
         this.total = total;
         this.listaProductos = listaProductos;
         this.unCliente = unCliente;
     }
+
+    
 
 }
