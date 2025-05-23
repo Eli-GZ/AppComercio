@@ -27,5 +27,5 @@ public interface IVentaService {
     
     //Traer venta por fecha
     public List<Venta> getVentasPorFecha(LocalDate fecha);
-    
+   
 }

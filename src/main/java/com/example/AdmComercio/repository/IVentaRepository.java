@@ -6,6 +6,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IVentaRepository extends JpaRepository<Venta, Long> {
-
-    List<Venta> findByFechaVenta(LocalDate fecha_venta);
+    List<Venta> findByFechaVenta(LocalDate fecha_venta);    
 }
