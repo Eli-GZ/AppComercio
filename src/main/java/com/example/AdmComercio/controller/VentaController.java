@@ -10,6 +10,7 @@ import com.example.AdmComercio.service.IProductoService;
 import com.example.AdmComercio.service.IVentaService;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -40,13 +41,24 @@ public class VentaController {
     @PostMapping("/ventas/crear")
     public String createVenta(@RequestBody VentaDTO ventaDTO) {
 
-        //obtener todos los productos   
+        //Obtener todos los productos   
         List<Producto> totalProductos = produServ.getProductos();
 
-        // Filtrar solo las ids
-        List<Producto> productosSeleccionados = totalProductos.stream()
-                .filter(p -> ventaDTO.getListaProductosIds()
-                .contains(p.getCodigo_producto())).collect(Collectors.toList());
+        //Obtener mapa id y producto
+        Map<Long, Producto> mapaProducto = totalProductos.stream()
+                .collect(Collectors.toMap(Producto::getCodigo_producto, p -> p));
+
+        //Construir la lista de productos respetando repeticiones
+        List<Producto> productosSeleccionados = new ArrayList<>();
+        double ventasTotales = 0.0;
+
+        for (Long id : ventaDTO.getListaProductosIds()) {
+            Producto produ = mapaProducto.get(id);
+            if (produ != null) {
+                productosSeleccionados.add(produ);
+                ventasTotales += produ.getCosto() != null ? produ.getCosto() : 0.0;
+            }
+        }
 
         //obtener cliente
         List<Cliente> todosLosClientes = clientServ.getClientes();
@@ -58,11 +70,7 @@ public class VentaController {
 
         if (client == null || productosSeleccionados.isEmpty()) {
             return "** Error: Cliente o productos no encontrados **";
-        }
-        //sumar las ventas
-        double ventasTotales = productosSeleccionados.stream()
-                .mapToDouble(t ->t.getCosto() != null ? t.getCosto() : 0.0).sum();        
-        
+        }      
 
         // Crear la venta
         Venta venta = new Venta();
