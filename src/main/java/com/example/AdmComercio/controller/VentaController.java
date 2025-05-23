@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class VentaController {
-    
+
     @Autowired
     private IProductoService produServ;
     @Autowired
@@ -50,20 +50,24 @@ public class VentaController {
 
         //obtener cliente
         List<Cliente> todosLosClientes = clientServ.getClientes();
-        
+
         Cliente client = todosLosClientes.stream()
                 .filter(c -> c.getId_cliente().equals(ventaDTO.getClienteId()))
                 .findFirst()
                 .orElse(null);
-        
+
         if (client == null || productosSeleccionados.isEmpty()) {
             return "** Error: Cliente o productos no encontrados **";
         }
+        //sumar las ventas
+        double ventasTotales = productosSeleccionados.stream()
+                .mapToDouble(t ->t.getCosto() != null ? t.getCosto() : 0.0).sum();        
+        
 
         // Crear la venta
         Venta venta = new Venta();
         venta.setFechaVenta(ventaDTO.getFecha_venta());
-        venta.setTotal(ventaDTO.getTotal());
+        venta.setTotal(ventasTotales);
         venta.setListaProductos(productosSeleccionados);
         venta.setUnCliente(client);
 
@@ -91,7 +95,7 @@ public class VentaController {
     public String deleteVenta(@PathVariable Long codigo_venta) {
         //confirmar que existe un cliente        
         Venta vent = ventaServ.findVenta(codigo_venta);
-        
+
         if (vent != null) {
             ventaServ.deleteVenta(codigo_venta);
             //mensaje de eliminacion correcta
@@ -125,7 +129,7 @@ public class VentaController {
                 .filter(c -> c.getId_cliente().equals(ventaDTO.getClienteId()))
                 .findFirst()
                 .orElse(null);
-        
+
         if (cliente == null || productosSeleccionados.isEmpty()) {
             return "** Error: Cliente o productos no encontrados **";
         }
@@ -138,7 +142,7 @@ public class VentaController {
 
         // Guardar los cambios
         ventaServ.saveVenta(ventaExistente);
-        
+
         return "La venta fue editada correctamente";
     }
 //**********************************************    
@@ -149,11 +153,11 @@ public class VentaController {
 
         // Buscar la venta original
         Venta ventaExistente = ventaServ.findVenta(codigo_venta);
-        
+
         if (ventaExistente == null) {
             return null;
         }
-        
+
         return ventaExistente.getListaProductos();
     }
 
@@ -166,20 +170,20 @@ public class VentaController {
         } catch (DateTimeParseException e) {
             return ResponseEntity.badRequest().body(Map.of("error", "Formato de fecha no permitido. Usá yyyy-MM-dd"));
         }
-        
+
         List<Venta> ventasDelDia = ventaServ.getVentasPorFecha(fecha);
         //Suma total del dia
         double sumaTotal = ventasDelDia.stream()
                 .mapToDouble(v -> v.getTotal() != null ? v.getTotal() : 0.0)
                 .sum();
-        
+
         int cantidad = ventasDelDia.size();
-        
+
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("fecha", fecha);
         respuesta.put("totalVentas", cantidad);
         respuesta.put("montoTotal", sumaTotal);
-        
+
         return ResponseEntity.ok(respuesta);
     }
 
@@ -187,22 +191,23 @@ public class VentaController {
     @GetMapping("/ventas/mayor_venta")
     public ResponseEntity<?> obtenerVentaMayor() {
         List<Venta> todasVentas = ventaServ.getVentas();
-        
+
         if (todasVentas.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay ventas registradas.");
         }
-        
+
         Venta ventaMayor = todasVentas.stream()
                 .max(Comparator.comparingDouble(v -> v.getTotal() != null ? v.getTotal() : 0.0))
                 .orElse(null);
-        
+
         TotalVentaDTO dto = new TotalVentaDTO();
         dto.setCodigo_venta(ventaMayor.getCodigo_venta());
         dto.setTotal(ventaMayor.getTotal());
         dto.setCantidadProductos(ventaMayor.getListaProductos() != null ? ventaMayor.getListaProductos().size() : 0);
+        dto.setClienteId(ventaMayor.getUnCliente().getId_cliente());
         dto.setNombre(ventaMayor.getUnCliente().getNombre());
         dto.setApellido(ventaMayor.getUnCliente().getApellido());
-        
+
         return ResponseEntity.ok(dto);
     }
 }
