@@ -27,5 +27,8 @@ public interface IVentaService {
     
     //Traer venta por fecha
     public List<Venta> getVentasPorFecha(LocalDate fecha);
-   
+    
+    //Traer venta por fecha
+    public List<Venta> getVentasConProducto(Long codigoProducto);
+
 }

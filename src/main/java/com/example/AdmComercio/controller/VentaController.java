@@ -123,13 +123,24 @@ public class VentaController {
             return "** Error: Venta no encontrada **";
         }
 
-        // Obtener todos los productos
-        List<Producto> todosLosProductos = produServ.getProductos();
+        //Obtener todos los productos   
+        List<Producto> totalProductos = produServ.getProductos();
 
-        // Filtrar los productos seleccionados
-        List<Producto> productosSeleccionados = todosLosProductos.stream()
-                .filter(p -> ventaDTO.getListaProductosIds().contains(p.getCodigo_producto()))
-                .collect(Collectors.toList());
+        //Obtener mapa id y producto
+        Map<Long, Producto> mapaProducto = totalProductos.stream()
+                .collect(Collectors.toMap(Producto::getCodigo_producto, p -> p));
+
+        //Construir la lista de productos respetando repeticiones
+        List<Producto> productosSeleccionados = new ArrayList<>();
+        double ventasTotales = 0.0;
+
+        for (Long id : ventaDTO.getListaProductosIds()) {
+            Producto produ = mapaProducto.get(id);
+            if (produ != null) {
+                productosSeleccionados.add(produ);
+                ventasTotales += produ.getCosto() != null ? produ.getCosto() : 0.0;
+            }
+        }
 
         // Buscar el cliente
         List<Cliente> todosLosClientes = clientServ.getClientes();
@@ -144,7 +155,7 @@ public class VentaController {
 
         // Actualizar los datos de la venta
         ventaExistente.setFechaVenta(ventaDTO.getFecha_venta());
-        ventaExistente.setTotal(ventaDTO.getTotal());
+        ventaExistente.setTotal(ventasTotales);
         ventaExistente.setListaProductos(productosSeleccionados);
         ventaExistente.setUnCliente(cliente);
 

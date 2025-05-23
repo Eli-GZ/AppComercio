@@ -1,7 +1,9 @@
 package com.example.AdmComercio.controller;
 
 import com.example.AdmComercio.model.Producto;
+import com.example.AdmComercio.model.Venta;
 import com.example.AdmComercio.service.IProductoService;
+import com.example.AdmComercio.service.IVentaService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class ProductoController {
 
     @Autowired
     private IProductoService producServ;
+    @Autowired
+    private IVentaService ventaServ;
 
     //ENDPOINT para crear un nuevo producto
     @PostMapping("/productos/crear")
@@ -44,7 +48,7 @@ public class ProductoController {
     //ENDPOINT para eliminar un producto
     @DeleteMapping("/productos/eliminar/{codigo_producto}")
     public String deleteProducto(@PathVariable Long codigo_producto) {
-        
+
         //confirmar que existe un producto
         Producto produ = producServ.findProducto(codigo_producto);
 
@@ -65,13 +69,24 @@ public class ProductoController {
             @RequestParam(required = false, name = "marca") String marcaNueva,
             @RequestParam(required = false, name = "costo") Double costoNuevo,
             @RequestParam(required = false, name = "cantidad") Double NuevaCantidad_disponible) {
-        //Envio id original(para buscar)
 
         //Envio nuevos datos para modificar
         producServ.editProducto(codigo_producto, nombreNuevo, marcaNueva, costoNuevo, NuevaCantidad_disponible);
 
         //busco la persoan editada para mostrarla
         Producto produ = producServ.findProducto(codigo_producto);
+
+        //Actualizacion del total
+        List<Venta> ventasConProducto = ventaServ.getVentasConProducto(codigo_producto);
+
+        for (Venta venta : ventasConProducto) {
+            double nuevoTotal = venta.getListaProductos().stream()
+                    .mapToDouble(p -> p.getCosto() != null ? p.getCosto() : 0.0)
+                    .sum();
+
+            venta.setTotal(nuevoTotal);
+            ventaServ.saveVenta(venta); // actualiza en BD
+        }
 
         return produ;
     }

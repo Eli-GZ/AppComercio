@@ -61,6 +61,9 @@ public class VentaService implements IVentaService {
         return VentRepo.findByFechaVenta(fecha);
     }
 
-   
+    @Override
+    public List<Venta> getVentasConProducto(Long codigoProducto) {
+        return VentRepo.findByProductoCodigo(codigoProducto);
+    }
 
 }
