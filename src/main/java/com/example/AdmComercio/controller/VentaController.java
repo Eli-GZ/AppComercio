@@ -41,6 +41,7 @@ public class VentaController {
     @PostMapping("/ventas/crear")
     public String createVenta(@RequestBody VentaDTO ventaDTO) {
 
+        //Actualizacion de TOTAL
         //Obtener todos los productos   
         List<Producto> totalProductos = produServ.getProductos();
 
@@ -70,7 +71,7 @@ public class VentaController {
 
         if (client == null || productosSeleccionados.isEmpty()) {
             return "** Error: Cliente o productos no encontrados **";
-        }      
+        }
 
         // Crear la venta
         Venta venta = new Venta();
@@ -82,7 +83,7 @@ public class VentaController {
         // Guardar la venta
         ventaServ.saveVenta(venta);
 
-//mensaje de creacion correcta
+        //mensaje de creacion correcta
         return "La venta fue creada correctamente";
     }
 
