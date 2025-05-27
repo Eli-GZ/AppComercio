@@ -51,7 +51,7 @@ public class ClienteController {
             //mensaje de eliminacion correcta
             return "El cliente fue eliminado correctamente";
         } else {
-            return "**No se encontro el id del cliente**";
+            return "No se encontro el id del cliente";
         }
     }
 

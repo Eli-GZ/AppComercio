@@ -56,7 +56,7 @@ public class ProductoController {
             //mensaje de eliminacion correcta
             return "El producto fue eliminado correctamente";
         } else {
-            return "**No se encontro el codigo del producto**";
+            return "No se encontro el codigo del producto";
         }
 
     }

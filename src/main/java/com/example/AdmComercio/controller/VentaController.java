@@ -45,19 +45,38 @@ public class VentaController {
         //Obtener todos los productos   
         List<Producto> totalProductos = produServ.getProductos();
 
-        //Obtener mapa id y producto
+        // Crear un mapa: id -> Producto
         Map<Long, Producto> mapaProducto = totalProductos.stream()
                 .collect(Collectors.toMap(Producto::getCodigo_producto, p -> p));
+
+        // Contar cuántas unidades se solicitan por cada producto
+        Map<Long, Long> conteoProductos = ventaDTO.getListaProductosIds().stream()
+                .collect(Collectors.groupingBy(id -> id, Collectors.counting()));
 
         //Construir la lista de productos respetando repeticiones
         List<Producto> productosSeleccionados = new ArrayList<>();
         double ventasTotales = 0.0;
 
-        for (Long id : ventaDTO.getListaProductosIds()) {
-            Producto produ = mapaProducto.get(id);
-            if (produ != null) {
-                productosSeleccionados.add(produ);
-                ventasTotales += produ.getCosto() != null ? produ.getCosto() : 0.0;
+        // Verificar stock disponible y construir la lista
+        for (Map.Entry<Long, Long> entrada : conteoProductos.entrySet()) {
+            Long idProducto = entrada.getKey();
+            Long cantidadSolicitada = entrada.getValue();
+
+            Producto producto = mapaProducto.get(idProducto);
+
+            if (producto == null) {
+                return "Error: No se encontró el producto con ID: " + idProducto;
+            }
+
+            Double stockDisponible = producto.getCantidad_disponible();
+            if (stockDisponible == null || stockDisponible < cantidadSolicitada) {
+                return "Error: Stock insuficiente. Producto: '" + producto.getNombre() + "'. Solicitado: " + cantidadSolicitada + ", Disponible: " + stockDisponible;
+            }
+
+            // Agregar el producto tantas veces como se pidió
+            for (int i = 0; i < cantidadSolicitada; i++) {
+                productosSeleccionados.add(producto);
+                ventasTotales += producto.getCosto() != null ? producto.getCosto() : 0.0;
             }
         }
 
@@ -70,7 +89,20 @@ public class VentaController {
                 .orElse(null);
 
         if (client == null || productosSeleccionados.isEmpty()) {
-            return "** Error: Cliente o productos no encontrados **";
+            return "Error: Cliente no encontrado";
+        }
+
+        //Descontar stock
+        for (Map.Entry<Long, Long> entrada : conteoProductos.entrySet()) {
+            Producto produ = mapaProducto.get(entrada.getKey());
+            Long cantidadVendida = entrada.getValue();
+
+            //Descontar
+            double nuevoStock = produ.getCantidad_disponible() - cantidadVendida;
+            produ.setCantidad_disponible(nuevoStock);
+
+            //Guardar producto actualizado
+            produServ.saveProducto(produ);
         }
 
         // Crear la venta
@@ -79,9 +111,8 @@ public class VentaController {
         venta.setTotal(ventasTotales);
         venta.setListaProductos(productosSeleccionados);
         venta.setUnCliente(client);
-
-        // Guardar la venta
         ventaServ.saveVenta(venta);
+
 
         //mensaje de creacion correcta
         return "La venta fue creada correctamente";
@@ -110,7 +141,7 @@ public class VentaController {
             //mensaje de eliminacion correcta
             return "La venta fue eliminada correctamente";
         } else {
-            return "**No se encontro el codigo de venta**";
+            return "No se encontro el codigo de venta";
         }
     }
 //ENDPOINT para editar una venta
@@ -151,7 +182,7 @@ public class VentaController {
                 .orElse(null);
 
         if (cliente == null || productosSeleccionados.isEmpty()) {
-            return "** Error: Cliente o productos no encontrados **";
+            return " Error: Cliente o productos no encontrados";
         }
 
         // Actualizar los datos de la venta
