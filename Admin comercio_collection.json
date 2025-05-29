@@ -1,0 +1,487 @@
+{
+	"info": {
+		"_postman_id": "4996ced4-45fe-4bc7-ba04-f638e7c4f60b",
+		"name": "Admin comercio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39933363"
+	},
+	"item": [
+		{
+			"name": "Productos",
+			"item": [
+				{
+					"name": "Crear producto",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {        \r\n    \"nombre\": \"Yerba mate\",\r\n    \"marca\": \"Taragui\",\r\n    \"costo\": 150.5,\r\n    \"cantidad_disponible\": 10.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/productos/crear",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un producto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/productos/{codigo_producto}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"{codigo_producto}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener todos los productos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"Harina\",\r\n    \"marca\":\"BlancaFlor\",\r\n    \"costo\":10.50,\r\n    \"cantidad_disponible\":4\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/productos",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un producto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/productos/eliminar/{codigo_producto}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"eliminar",
+								"{codigo_producto}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar un producto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/productos/editar/5?nombre=Yerbamate&marca=Taragui&costo=1500&cantidad=5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"editar",
+								"5"
+							],
+							"query": [
+								{
+									"key": "nombre",
+									"value": "Yerbamate"
+								},
+								{
+									"key": "marca",
+									"value": "Taragui"
+								},
+								{
+									"key": "costo",
+									"value": "1500"
+								},
+								{
+									"key": "cantidad",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar stock (<5)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/productos/falta_stock",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"falta_stock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "Crear cliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"Emilio\",\r\n    \"apellido\":\"Gomez\",\r\n    \"dni\":\"35549845\"   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/clientes/crear",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/clientes/@",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes",
+								"@"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener todos los clientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/clientes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un cliente",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"Carlitos\",\r\n    \"apellido\":\"Pereira\",\r\n    \"dni\":\"21156987\"   \r\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/clientes/eliminar/@",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes",
+								"eliminar",
+								"@"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar un cliente",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/clientes/editar/@?nombre=Juan&apellido=Perez&dni=40598789",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"clientes",
+								"editar",
+								"@"
+							],
+							"query": [
+								{
+									"key": "nombre",
+									"value": "Juan"
+								},
+								{
+									"key": "apellido",
+									"value": "Perez"
+								},
+								{
+									"key": "dni",
+									"value": "40598789"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ventas",
+			"item": [
+				{
+					"name": "Nueva venta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha_venta\": \"2025-05-09\",  \r\n  \"listaProductosIds\": [2,2,2,2,2,2,2],\r\n  \"clienteId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/ventas/crear",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener una venta",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/ventas/{codigo_venta}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas",
+								"{codigo_venta}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener todas las ventas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha_venta\": \"2025-05-19\",\r\n  \"total\": 300.50,\r\n  \"listaProductosIds\": [@, @, @],\r\n  \"clienteId\": @\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/ventas",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar una venta",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha_venta\": \"2025-05-19\",\r\n  \"total\": 300.50,\r\n  \"listaProductosIds\": [@, @, @],\r\n  \"clienteId\": @\r\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/ventas/eliminar/{codigo_venta}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas",
+								"eliminar",
+								"{codigo_venta}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar una venta",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha_venta\": \"2025-05-09\",  \r\n  \"listaProductosIds\": [1,3],\r\n  \"clienteId\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/ventas/editar/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas",
+								"editar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener List<Producto> de venta",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/ventas/productos/{codigo_venta}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas",
+								"productos",
+								"{codigo_venta}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fecha y total del dia",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/ventas/fecha/yyyy-mm-dd",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas",
+								"fecha",
+								"yyyy-mm-dd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Venta Mayor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/ventas/mayor_venta",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ventas",
+								"mayor_venta"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
