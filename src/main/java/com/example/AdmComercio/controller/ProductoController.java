@@ -53,7 +53,7 @@ public class ProductoController {
 
         if (produ != null) {
             producServ.deleteProducto(codigo_producto);
-            //mensaje de eliminacion correcta
+            //mensaje de eliminación correcta
             return "El producto fue eliminado correctamente";
         } else {
             return "No se encontro el codigo del producto";
